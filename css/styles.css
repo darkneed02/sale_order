@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.tab {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px;
+}
+
+.left-tab {
+    flex: 1;
+}
+
+.right-tab {
+    flex: 2;
+}
+
+#orderList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#orderList li {
+    margin-bottom: 10px;
+}
+
+#orderList li a {
+    text-decoration: none;
+    color: blue;
+    cursor: pointer;
+}
+
+#orderList li a:hover {
+    text-decoration: underline;
+}
+
+#approvalButtons {
+    margin-top: 20px;
+}
