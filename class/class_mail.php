@@ -23,7 +23,7 @@
      
             $mail->setFrom('Jaruwat.a@cloudmatethailand.onmicrosoft.com', 'Admin Sender');
             $mail->addAddress('mail_approve@smt-tours.com', 'Admin Recipent');
-            $mail->addCC('Jaruwat.a@cloudmatethailand.onmicrosoft.com', 'ผู้เกี่ยวข้อง'); //* CC Mail You can add CC email
+            $mail->addCC('sapidsrollout@nttdata.co.th', 'ผู้เกี่ยวข้อง'); //* CC Mail You can add CC email
             $mail->addCC($email, 'ผู้เกี่ยวข้อง'); //* CC Mail You can add CC email
     
             // Email Content

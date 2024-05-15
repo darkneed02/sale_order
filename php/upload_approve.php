@@ -50,26 +50,26 @@ if (isset($_FILES['excelFile'])) {
             // เรียกฟังก์ชัน import_data และตรวจสอบผลลัพธ์
             if (import_data($conn, $sale_id, $sale_date, $buyer, $order, $quantity, $unit, $saler, $total, $unit_price)) {
                 echo "บันทึกสำเร็จสำหรับรายการ $sale_id\n";
-
-                // Prepare order_id and description for LINE Notify
-                $order_id = "[เปิดรายการเพิ่มอนุมัติ](http://localhost/Approve%20sales%20order/list_order.php)";
-                $description = "";
-                $list_approve = "รายการใหม่";
-
-                // Send LINE Notify
-                $result = sendLineNotify($list_approve,$order_id, $description);
-
-                if ($result) {
-                    // ส่งอีเมล์
-                    $to = 'mail_approve@smt-tours.com';
-                    $subject = 'มีรายการเพิ่มข้อมูลขออนุมัติจ่าย';
-                    $message = $order_id;
-
-                    sendMail($subject, $message, $to);
-                }
             } else {
                 echo "การบันทึกรายการ $sale_id ล้มเหลว\n";
             }
+        }
+        
+        // Prepare order_id and description for LINE Notify
+        $order_id = "[เปิดรายการเพิ่มอนุมัติ](http://203.151.66.18:81/Approve%20sales%20order/list_order.php)";
+        $description = "";
+        $list_approve = "รายการใหม่";
+
+        // Send LINE Notify
+        $result = sendLineNotify($list_approve,$order_id, $description);
+
+        if ($result) {
+            // ส่งอีเมล์
+            $to = 'mail_approve@smt-tours.com';
+            $subject = 'มีรายการเพิ่มข้อมูลขออนุมัติจ่าย';
+            $message = $order_id;
+
+            sendMail($subject, $message, $to);
         }
     } else {
         echo "ไฟล์ที่อัปโหลดไม่ใช่ไฟล์ Excel ที่รองรับ\n";
