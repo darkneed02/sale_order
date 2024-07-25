@@ -1,57 +1,62 @@
 <?php
     include('../class/class_connect_db.php');
     include('../class/class_view_order.php');
-    include('../class/class_mail.php');
+    include('class_mail.php');
+    include('function_line.php');
 
     $conn = db_connect();
 
-    if(isset($_POST['approve'])){
+    if (isset($_POST['approve'])) {
         $order_id = $_POST['order_id'];
-        $email_cus = $_POST['email_cus'];
+        $email = $_POST['email'];
         $descripton = $_POST['descripton'];
-        $list_approve = 'รายการอนุมัติ :';
-
-        /***
-         * * ทำการอนุมัติรายการออร์เดอร์
-         */
-        if(update_status($conn,$order_id,1,$descripton)){
-            $result = sendLineNotify($list_approve,$order_id,$descripton);
-
-            // email
-            $to = $email_cus;
-            $subject = 'รายการใบจ่าย';
-            $message = 'ทำการอนุมัติรายการ'.' '. $order_id;
+        $approve_by = 'some_user'; // เปลี่ยนเป็นผู้ใช้จริงในระบบ
     
-            sendMail($subject,$message,$to);
+        if (update_status($conn, $order_id, 1, $descripton, $approve_by)) {
 
-            echo json_encode(['status' => 'success', 'message' => 'ทำการอนุมัติเสร็จสิ้น']);
-        }else{
-            echo json_encode(['status' => 'error', 'message' => 'เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแล']);
+            $id_customer = 'U6d42adeba8f14f9f94143e690073626d';
+
+            $userId = $id_customer;
+            $message = 'อนุมัติรายการ'.$order_id;
+
+            $response = sendLineMessage($userId,$message);
+
+            $short_txt = 'ไม่อนุมัติรายการ'; // You might want to change this value
+            $description = $descripton; // You might want to change this value
+
+            send_mail($order_id, $short_txt, $description,$email);
+
+
+            echo "ทำการอนุมัติเรียบร้อย";
+        } else {
+            echo "เกิดข้อผิดพลาด";
         }
     }
 
+
     if(isset($_POST['cancel'])){
         $order_id = $_POST['order_id'];
-        $email_cus = $_POST['email_cus'];
+        $email = $_POST['email'];
         $descripton = $_POST['descripton'];
-        $list_approve = 'รายการไม่อนุมัติ :';
-
-        /***
-         * * ทำการไม่อนุมัติรายการออร์เดอร์
-         */
-        if(update_status($conn,$order_id,2,$descripton)){
-            $result = sendLineNotify($list_approve,$order_id,$descripton);
-
-            // email
-            $to = $email_cus;
-            $subject = 'รายการใบจ่าย';
-            $message = 'ทำการไม่อนุมัติรายการ'.' '. $order_id;
+        $approve_by = 'some_user'; // เปลี่ยนเป็นผู้ใช้จริงในระบบ
     
-            sendMail($subject,$message,$to);
+        if (update_status($conn, $order_id, 2, $descripton, $approve_by)) {
 
-            echo json_encode(['status' => 'success', 'message' => 'ทำการอนุมัติเสร็จสิ้น']);
-        }else{
-            echo json_encode(['status' => 'error', 'message' => 'เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแล']);
+            $id_customer = 'U6d42adeba8f14f9f94143e690073626d';
+
+            $userId = $id_customer;
+            $message = 'ไม่อนุมัติรายการ'.$order_id;
+
+            $response = sendLineMessage($userId,$message);
+
+            $short_txt = 'ไม่อนุมัติรายการ'; // You might want to change this value
+            $description = $descripton; // You might want to change this value
+
+            send_mail($order_id, $short_txt, $description,$email);
+
+            echo "ทำการไม่อนุมัติเรียบร้อย";
+        } else {
+            echo "เกิดข้อผิดพลาด";
         }
     }
 

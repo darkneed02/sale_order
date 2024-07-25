@@ -34,22 +34,3 @@
     <script src="js/import_file.js"></script>
     <script src="js/export_file.js"></script>
     <script src="js/export_sale_id.js"></script>
-
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var table = document.getElementById("priceTable");
-        var rows = table.getElementsByTagName("tr");
-        var totalPriceInput = document.getElementById("totalPrice");
-        var totalPrice = 0;
-
-        for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip the header row
-            var cells = rows[i].getElementsByTagName("td");
-            var priceCell = cells[cells.length - 1]; // Get the last td in the row (ราคาสุทธิ)
-            var price = parseInt(priceCell.innerText);
-            totalPrice += price;
-        }
-
-        totalPriceInput.value = totalPrice;
-    });
-</script>

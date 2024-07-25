@@ -12,7 +12,7 @@ $(document).ready(function(){
             success: function(response){
             Swal.fire({
                     title:'อัพโหลดข้อมูลสำเร็จ',
-                    text: "บันทึกสำเร็จ",
+                    text:  response,
                     icon: 'success'
                 }).then(function() {
                     window.location = 'list_order.php';

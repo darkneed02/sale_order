@@ -2,7 +2,8 @@
 include('../lib/vendor/autoload.php');
 include('../class/class_view_order.php');
 include('../class/class_connect_db.php');
-include('../class/class_mail.php');
+include('function_line.php');
+include('class_mail.php');
 
 $conn = db_connect();
 
@@ -37,39 +38,62 @@ if (isset($_FILES['excelFile'])) {
                 continue;
             }
 
+            /***
+             * * new record data
+             */
+
             $sale_id = $row[0];
-            $sale_date = $row[1];
-            $saler = $row[2];
-            $order = $row[3];
-            $quantity = $row[4];
-            $unit = $row[5];
-            $total = $row[6];
-            $unit_price = $row[7];
-            $buyer = $row[8];
+            $item_id = $row[1];
+            $sale_date = $row[2];
+            $sale_drivery = $row[3];
+            $buyer = $row[4];
+            $email_cus = $row[5];
+            $order = $row[6];
+            $quantity = $row[7];
+            $unit = $row[8];
+            $unit_price = $row[9];
+            $total = $row[10];
+            $vat = $row[11];
+            $net_amount = $row[12];
+            $unit_amount = $row[13];
+            $salyer = $row[14];
+
+
+            echo $sale_id;
 
             // เรียกฟังก์ชัน import_data และตรวจสอบผลลัพธ์
-            if (import_data($conn, $sale_id, $sale_date, $buyer, $order, $quantity, $unit, $saler, $total, $unit_price)) {
+            // if (import_data($conn, $sale_id, $sale_date, $buyer, $order, $quantity, $unit, $saler, $total, $unit_price, $email_cus, $vat, $net_amount)) {
+            //     echo "บันทึกสำเร็จสำหรับรายการ $sale_id\n";
+            // } else {
+            //     echo "การบันทึกรายการ $sale_id ล้มเหลว\n";
+            // }
+
+            /**
+             * * เพิ่มข้อมูลใหม่ 
+             */
+            if(import_data_excel($conn,$item_id,$sale_date,$sale_drivery,$buyer,$email_cus,$order,$quantity,$unit,$unit_price,$total,$vat,$net_amount,$unit_amount, $salyer, 0, 'U00001',$sale_id)){
                 echo "บันทึกสำเร็จสำหรับรายการ $sale_id\n";
-            } else {
+            }else{
                 echo "การบันทึกรายการ $sale_id ล้มเหลว\n";
             }
         }
         
         // Prepare order_id and description for LINE Notify
-        $order_id = "[เปิดรายการเพิ่มอนุมัติ](http://203.151.66.18:81/Approve%20sales%20order/list_order.php)";
-        $description = "";
-        $list_approve = "รายการใหม่";
+        $order_id = "[เปิดรายการเพิ่มอนุมัติ][https://www.cm-mejobs.com/sale_order/list_order.php]";
 
-        // Send LINE Notify
-        $result = sendLineNotify($list_approve,$order_id, $description);
+        $id_customer = 'U6d42adeba8f14f9f94143e690073626d';
+
+        $userId = $id_customer;
+        $message = 'ทำการเพิ่มรายการอนุมัติ'. $order_id;
+
+        $response = sendLineMessage($userId,$message);
 
         if ($result) {
             // ส่งอีเมล์
-            $to = 'mail_approve@smt-tours.com';
-            $subject = 'มีรายการเพิ่มข้อมูลขออนุมัติจ่าย';
-            $message = $order_id;
+            $short_txt = 'มีรายการอนุมัติรายการ'; // You might want to change this value
+            $description = 'https://www.cm-mejobs.com/sale_order/list_order.php'; // You might want to change this value
 
-            sendMail($subject, $message, $to);
+            send_mail($order_id, $short_txt, $description);
         }
     } else {
         echo "ไฟล์ที่อัปโหลดไม่ใช่ไฟล์ Excel ที่รองรับ\n";

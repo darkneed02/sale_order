@@ -47,10 +47,10 @@
                             ?>
                                 <tr>
                                     <td><?php echo $count++ ?></td>
-                                    <td class="text-center"><?php echo $row['sale_order_id']; ?></td>
+                                    <td class="text-center"><?php echo $row['sale_id']; ?></td>
                                     <td class="text-center"><?php echo $row['sale_date']; ?></td>
-                                    <td class="text-center"><?php echo $row['saler']; ?></td>
-                                    <td class="text-center"><?php echo $row['order_sale']; ?></td>
+                                    <td class="text-center"><?php echo $row['salyer']; ?></td>
+                                    <td class="text-center"><?php echo $row['order']; ?></td>
                                     <td class="text-center"><?php echo $row['quantity']; ?></td>
                                     <td class="text-center"><?php echo $row['unit']; ?></td>
                                     <td class="text-center"><?php echo $row['total']; ?></td>
@@ -64,7 +64,7 @@
                                         }
                                     ?></td>
                                     <td class="text-center">
-                                        <button type="button" class="btn btn-success btn-circle btn_export_id" name="btn_export_id" id="btn_export_id" data-export_id="<?php echo $row['sale_order_id'] ?>">
+                                        <button type="button" class="btn btn-success btn-circle btn_export_id" name="btn_export_id" id="btn_export_id" data-export_id="<?php echo $row['sale_id'] ?>">
                                             <i class="fas fa-file-export"></i>
                                         </button>
                                     </td>

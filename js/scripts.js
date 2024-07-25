@@ -1,7 +1,8 @@
 $(document).ready(function(){
-    $('#btn_approve').click(function() {
+    
+    $('#btn_approve').on('click', function(){
         var order_id = $(this).data('order_id');
-        var email_cus = $('#email_cus').val();
+        var email = $('#email_cus').val();
         var descripton = $('#descripton').val();
         var approve = 'approve';
 
@@ -9,74 +10,44 @@ $(document).ready(function(){
             url: 'php/process_order.php',
             method: 'post',
             data: {
-                order_id:order_id,
-                approve:approve,
-                email_cus:email_cus,
-                descripton:descripton
+                order_id:order_id,email:email,descripton:descripton,approve:approve
             },
-            dataType: 'json',
             success: function(response){
-                if(response.status === 'success'){
-                    swal.fire({
-                        icon: 'success',
-                        title: 'บันทึกสำเร็จ',
-                        text: 'ทำการอนุมัติเรียบร้อย',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(function() {
-                        window.location = 'list_order.php';
-                    });
-                }else{
-                    swal.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ'
-                    });
-                }
-            },
-            error: function(xhr, status, error){
-                console.log('Error: ', + error);
+                swal.fire({
+                    icon: 'success',
+                    title: 'ทำการอนุมัติรายการ'+ order_id,
+                    text:  response,
+                    showConfirmButton: false,
+                    // timer: 1500
+                }).then(function() {
+                    window.location = 'list_order.php';
+                });
             }
         });
     });
-
+    
     $('#btn_cancle').click(function() {
         var order_id = $(this).data('order_id');
-        var email_cus = $('#email_cus').val();
+        var email = $('#email_cus').val();
         var descripton = $('#descripton').val();
-        var cancel = 'cancel'
+        var cancel = 'cancel';
 
         $.ajax({
             url: 'php/process_order.php',
             method: 'post',
             data: {
-                order_id:order_id,
-                cancel:cancel,
-                email_cus:email_cus,
-                descripton:descripton
+                order_id:order_id,email:email,descripton:descripton,cancel:cancel
             },
-            dataType: 'json',
             success: function(response){
-                if(response.status === 'success'){
-                    swal.fire({
-                        icon: 'error',
-                        title: 'ปฏิเสธการอนุมัติ',
-                        text: 'ปฏิเสธการอนุมัติ',
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(function() {
-                        window.location = 'list_order.php';
-                    });
-                }else{
-                    swal.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'เกิดข้อผิดพลาด กรุณาติดต่อผู้ดูแลระบบ'
-                    });
-                }
-            },
-            error: function(xhr, status, error){
-                console.log('Error: ', + error);
+                swal.fire({
+                    icon: 'success',
+                    title: 'ทำการไม่อนุมัติรายการ'+ order_id,
+                    text:  response,
+                    showConfirmButton: false,
+                    // timer: 1500
+                }).then(function() {
+                    window.location = 'list_order.php';
+                });
             }
         });
     });

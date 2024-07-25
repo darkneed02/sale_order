@@ -2,7 +2,7 @@
     include('../class/class_connect_db.php');
     include('../lib/vendor/autoload.php');
     include('../class/class_view_order.php');
-    include('../class/func_date.php');
+    // include('../class/func_date.php');
 
     $conn = db_connect();
 
@@ -19,33 +19,42 @@
 
             $header = [
                 'เลขที่ใบสั่งขาย',
+                'item',
                 'วันที่ใบสั่ง',
+                'วันที่ส่งมอบ',
                 'ผู้ซื้อ',
+                'customer email',
                 'รายการสินค้า',
                 'จำนวน',
-                'หน่วยงาน',
+                'หน่วย',
+                'ราคา/หน่วย',
                 'จำนวนเงิน',
+                'vat 7%',
+                'จำนวนเงินสุทธิ',
                 'หน่วย(บาท)',
                 'ผู้ขาย',
-                'สถานะ',
+                'สถานะอนุมัติ',
                 'เหตุผล/หมายเหตุ',
                 'วันที่อนุมัติ'
             ];
             $sheet->fromArray($header, NULL, 'A1');
             $row = 2;
             while($data = pg_fetch_assoc($result)){
-                $sale_id = $data['sale_order_id'];
+                $sale_id = $data['sale_id'];
+                $item_id = $data['item_id'];
                 $sale_date = $data['sale_date'];
+                $sale_drivery = $data['sale_drivery'];
                 $buyer = $data['buyer'];
-                $order_sale = $data['order_sale'];
+                $email_cus = $data['email_cus'];
+                $order = $data['order'];
                 $quantity = $data['quantity'];
                 $unit = $data['unit'];
-                $saler = $data['saler'];
-                $total = $data['total'];
                 $unit_price = $data['unit_price'];
-                $approve_date = $data['create_date'];
-                $descripton = $data['descripton'];
-
+                $total = $data['total'];
+                $vat = $data['vat'];
+                $net_amount =$data['net_amount'];
+                $unit_amount = $data['unit_amount'];
+                $salyer = $data['salyer'];
                 $status  = $data['status'];
 
                 $status_text = $status;
@@ -56,21 +65,28 @@
                     $status_text = '02';
                 } 
 
-                $Approve_Date_DC = converToThaiDate($approve_date); // approve date
-                $sale_date_DC = converdate($sale_date);
+                $descripton = $data['descripton'];
+
+                $approve_date = $data['approve_date'];
 
                 $sheet->setCellValue('A'. $row, $sale_id);
-                $sheet->setCellValue('B'. $row, $sale_date_DC);
-                $sheet->setCellValue('C'. $row, $buyer);
-                $sheet->setCellValue('D'. $row, $order_sale);
-                $sheet->setCellValue('E'. $row, $quantity);
-                $sheet->setCellValue('F'. $row, $unit);
-                $sheet->setCellValue('G'. $row, $total);
-                $sheet->setCellValue('H'. $row, $unit_price);
-                $sheet->setCellValue('I'. $row, $saler);
-                $sheet->setCellValue('J'. $row, $status_text);
-                $sheet->setCellValue('K'. $row, $descripton);
-                $sheet->setCellValue('L'. $row, $Approve_Date_DC);
+                $sheet->setCellValue('B'. $row, $item_id);
+                $sheet->setCellValue('C'. $row, $sale_date);
+                $sheet->setCellValue('D'. $row, $sale_drivery);
+                $sheet->setCellValue('E'. $row, $buyer);
+                $sheet->setCellValue('F'. $row, $email_cus);
+                $sheet->setCellValue('G'. $row, $order);
+                $sheet->setCellValue('H'. $row, $quantity);
+                $sheet->setCellValue('I'. $row, $unit);
+                $sheet->setCellValue('J'. $row, $unit_price);
+                $sheet->setCellValue('K'. $row, $total);
+                $sheet->setCellValue('L'. $row, $vat);
+                $sheet->setCellValue('M'. $row, $net_amount);
+                $sheet->setCellValue('N'. $row, $unit_amount);
+                $sheet->setCellValue('O'. $row, $salyer);
+                $sheet->setCellValue('P'. $row, $status_text);
+                $sheet->setCellValue('Q'. $row, $descripton);
+                $sheet->setCellValue('R'. $row, $approve_date);
 
                 $row++;
             }
